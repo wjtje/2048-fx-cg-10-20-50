@@ -102,7 +102,7 @@ const color_t logo[9280] = {
 
 // Custom function
 void fillArea(unsigned x,unsigned y,unsigned w,unsigned h,unsigned short col){
-	unsigned short*s=(unsigned short*)0xA8000000;
+	unsigned short*s=(unsigned short*)0xAC000000;
 	s+=(y*384)+x;
 	while(h--){
 		unsigned w2=w;
@@ -184,7 +184,7 @@ void drawBackground() {
   fillArea(247, 106, 1, 40, 0x9c4f);
   fillArea(332, 105, 1, 40, 0x9c4f);
 
-  int xa = 270;
+  int xa = 265;
   int ya = 82;
   PrintMini(&xa, &ya, "score", 0x02, 0xffffffff, 0, 0, 0xe6fa, 0x9c4f, 1, 0);
 
@@ -293,61 +293,50 @@ int createRandomTile() {
 
 void slideTile(int p) {
   int times = 0;
+
+  // Movement vars
+  int a = 0;
+  int b = 0;
+  int c = 0;
+  int d = 0;
+
   while (times != 4) {
     int xTile = 0;
     int yTile = 0;
 
     while (xTile != 4) {
       while (yTile != 4) {
+        // Set correct move vars
         if (p == 0) {
-          // Go up
-          if (yTile != 0) { // top row is skiped
-            if (board[yTile-1][xTile] == 0) {
-              board[yTile-1][xTile] = board[yTile][xTile];
-              board[yTile][xTile] = 0;
-            } else if (board[yTile-1][xTile] == board[yTile][xTile]) {
-              board[yTile-1][xTile] = board[yTile][xTile]*2;
-              board[yTile][xTile] = 0;
-              score = score + board[yTile-1][xTile];
-            }
-          }
+          a = -1;
+          c = yTile;
+          d = 0;
         } else if (p == 1) {
-          // Go down
-          if (yTile != 3) { // top row is skiped
-            if (board[yTile+1][xTile] == 0) {
-              board[yTile+1][xTile] = board[yTile][xTile];
-              board[yTile][xTile] = 0;
-            } else if (board[yTile+1][xTile] == board[yTile][xTile]) {
-              board[yTile+1][xTile] = board[yTile][xTile]*2;
-              board[yTile][xTile] = 0;
-              score = score + board[yTile+1][xTile];
-            }
-          }
+          a = 1;
+          c = yTile;
+          d = 3;
         } else if (p == 2) {
-          // Go left
-          if (xTile != 0) {
-            if (board[yTile][xTile-1] == 0) {
-              board[yTile][xTile-1] = board[yTile][xTile];
-              board[yTile][xTile] = 0;
-            } else if (board[yTile][xTile-1] == board[yTile][xTile]) {
-              board[yTile][xTile-1] = board[yTile][xTile]*2;
-              board[yTile][xTile] = 0;
-              score = score + board[yTile][xTile-1];
-            }
-          }
+          b = -1;
+          c = xTile;
+          d = 0;
         } else if (p == 3) {
-          // Go right
-          if (xTile != 3) {
-            if (board[yTile][xTile+1] == 0) {
-              board[yTile][xTile+1] = board[yTile][xTile];
-              board[yTile][xTile] = 0;
-            } else if (board[yTile][xTile+1] == board[yTile][xTile]) {
-              board[yTile][xTile+1] = board[yTile][xTile]*2;
-              board[yTile][xTile] = 0;
-              score = score + board[yTile][xTile+1];
-            }
+          b = 1;
+          c = xTile;
+          d = 3;
+        }
+
+        // Move
+        if (c != d) {
+          if (board[yTile+a][xTile+b] == 0) {
+            board[yTile+a][xTile+b] = board[yTile][xTile];
+            board[yTile][xTile] = 0;
+          } else if (board[yTile+a][xTile+b] == board[yTile][xTile]) {
+            board[yTile+a][xTile+b] = board[yTile][xTile]*2;
+            board[yTile][xTile] = 0;
+            score = score + board[yTile+a][xTile+b];
           }
         }
+
         yTile = yTile + 1;
       }
       yTile = 0;

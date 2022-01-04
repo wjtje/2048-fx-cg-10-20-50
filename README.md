@@ -5,3 +5,8 @@ Casio fx-cg 50    -> 2048 (cg-50).g3a
 
 If there are no graphics showing up try using the other file.
 This programm is under the GNU V3 license
+
+## Screenshots
+
+![](screenshots/1.gif)
+![](screenshots/2.gif)
